@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.aliyun.odps.jdbc.OdpsDriver
+    url:
+    username:
+    password:
+
+    #自定义多数据源属性
+    #预发mysql
+    mysql:
+      url:
+      username:
+      password:
+      driverClassName:
+    #线上odps
+    odps:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.aliyun.odps.jdbc.OdpsDriver
+      url:
+      username:
+      password:
+      defaultAutoCommit: false
+    druid:
+      default-auto-commit: false

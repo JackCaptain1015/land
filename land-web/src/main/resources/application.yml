@@ -1,0 +1,5 @@
+#此为spsringboot的主配置文件
+#指定pre的环境，这样springboot启动时候会自动选择pre环境
+spring:
+  profiles:
+    active: pre
