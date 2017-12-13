@@ -1,4 +1,4 @@
 # land
-SpringBoot多模块+多数据源demo
+SpringBoot+Mybatis 多模块+多数据源demo
 
-springBoot交流：539013757
+springBoot交流群：539013757
