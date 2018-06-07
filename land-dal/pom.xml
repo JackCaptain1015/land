@@ -4,7 +4,7 @@
 
 	<parent>
 		<artifactId>land</artifactId>
-		<groupId>adbaitai</groupId>
+		<groupId>captain</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 

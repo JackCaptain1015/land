@@ -77,7 +77,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.adbaitai.land.mapper">
+    <logger name="com.captain.land.mapper">
         <level value="DEBUG" />
         <appender-ref ref="DB" />
     </logger>
