@@ -10,9 +10,9 @@ spring:
     #预发mysql
     mysql:
       url:
-      username:
-      password:
-      driverClassName:
+      username: root
+      password: 123456
+      driverClassName: com.mysql.jdbc.Driver
     #线上odps
     odps:
       type: com.alibaba.druid.pool.DruidDataSource
