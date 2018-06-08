@@ -1,7 +1,7 @@
 package com.captain.template.segment;
 
 import com.captain.template.bean.Field;
-import com.captain.utils.StringUtils;
+import com.captain.template.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
@@ -40,18 +40,21 @@ public class FieldSegment {
     @Value("${generate.tableList}")
     private String [] tableList;
 
-    private static final Map<String,List<Field>> tableFieldsMap = Maps.newConcurrentMap();
+    private final Map<String,List<Field>> tableFieldsMap = Maps.newConcurrentMap();
 
     /**
      * return key:tableName
      */
-    public Map<String,List<Field>> getField() throws SQLException {
+    public void init() throws SQLException {
         //未被连接的表
         List<String> unlinkTableList = Lists.newArrayList();
         for (String tableName : tableList) {
             if (tableFieldsMap.get(tableName) == null){
                 unlinkTableList.add(tableName);
             }
+        }
+        if (unlinkTableList.size() == 0){
+            return;
         }
         //key:tableName value:querySql
         Map<String,String> sqlTableMap = Maps.newHashMap();
@@ -77,11 +80,6 @@ public class FieldSegment {
                 tableFieldsMap.put(entry.getKey(),fieldList);
             }
         }
-        return tableFieldsMap;
-    }
-
-    public void getFieldSql(){
-
     }
 
 }

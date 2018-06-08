@@ -1,4 +1,4 @@
-package com.captain.utils;
+package com.captain.template.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
