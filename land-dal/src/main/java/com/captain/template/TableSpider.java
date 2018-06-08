@@ -13,12 +13,11 @@ import java.sql.SQLException;
  */
 @Component
 public class TableSpider {
-    @Resource
-    private SqlSessionTemplate sqlSessionTemplate;
+
 
     public void test() throws SQLException {
-        ResultSetMetaData metaData = sqlSessionTemplate.getConnection().createStatement().executeQuery("select * from event").getMetaData();
-        System.out.println(metaData);
+//        ResultSetMetaData metaData = sqlSessionTemplate.getConnection().createStatement().executeQuery("select * from event").getMetaData();
+//        System.out.println(metaData);
     }
 
 }

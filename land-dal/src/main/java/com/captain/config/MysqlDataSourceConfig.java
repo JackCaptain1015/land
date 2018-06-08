@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableConfigurationProperties
 @MapperScan(basePackages = "com.captain.land.mapper", sqlSessionTemplateRef  = "mysqlSqlSessionTemplate")
+@ComponentScan("com.captain")
 public class MysqlDataSourceConfig {
 
     public static final String MYSQL_MAPPER_RESOURCE_LOCATION = "classpath:com/captain/land/mapper/*.xml";
