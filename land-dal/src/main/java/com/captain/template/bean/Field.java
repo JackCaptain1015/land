@@ -9,8 +9,6 @@ import lombok.Data;
 public class Field {
     //数据库字段名
     private String fieldSourceName;
-    //数据库字段类型
-    private String fieldSourceType;
     //驼峰式字段名
     private String fieldCamelName;
     //java中字段类型

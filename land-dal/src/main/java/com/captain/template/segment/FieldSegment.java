@@ -2,14 +2,11 @@ package com.captain.template.segment;
 
 import com.captain.template.bean.Field;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -57,9 +54,15 @@ public class FieldSegment {
             for (String querySql : queryList) {
                 ResultSetMetaData metaData = connection.prepareStatement(querySql).getMetaData();
                 int columnCount = metaData.getColumnCount();
+                List<Field> fieldList = Lists.newArrayList();
                 for (int i = 1; i <= columnCount; i++) {
-                    System.out.println(metaData.getColumnClassName(i));
-                    System.out.println(metaData.getColumnName(i));
+                    Field field = new Field();
+                    field.setFieldSourceName(metaData.getColumnName(i));
+                    field.setFieldDescType(metaData.getColumnClassName(i));
+//                    field
+
+                    System.out.println();
+                    System.out.println();
                 }
                 System.out.println();
             }
@@ -71,4 +74,5 @@ public class FieldSegment {
     public void getFieldSql(){
 
     }
+
 }
