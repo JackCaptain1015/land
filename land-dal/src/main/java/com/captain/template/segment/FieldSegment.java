@@ -1,7 +1,9 @@
 package com.captain.template.segment;
 
 import com.captain.template.bean.Field;
+import com.captain.utils.StringUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -42,33 +44,32 @@ public class FieldSegment {
      * return key:tableName
      */
     public Map<String,List<Field>> getField() throws SQLException {
-        List<String> queryList = Lists.newArrayList();
+        Map<String,List<Field>> returnMap = Maps.newHashMap();
+        //key:tableName value:querySql
+        Map<String,String> sqlTableMap = Maps.newHashMap();
         for (String tableName : tableList) {
             String querySql = "select * from "+tableName;
-            queryList.add(querySql);
+            sqlTableMap.put(tableName,querySql);
         }
         try(
             SqlSession sqlSession = sqlSessionFactory.openSession();
             Connection connection = sqlSession.getConnection();
         ){
-            for (String querySql : queryList) {
-                ResultSetMetaData metaData = connection.prepareStatement(querySql).getMetaData();
+            for (Map.Entry<String,String> entry : sqlTableMap.entrySet()) {
+                ResultSetMetaData metaData = connection.prepareStatement(entry.getValue()).getMetaData();
                 int columnCount = metaData.getColumnCount();
                 List<Field> fieldList = Lists.newArrayList();
                 for (int i = 1; i <= columnCount; i++) {
                     Field field = new Field();
                     field.setFieldSourceName(metaData.getColumnName(i));
                     field.setFieldDescType(metaData.getColumnClassName(i));
-//                    field
-
-                    System.out.println();
-                    System.out.println();
+                    field.setFieldCamelName(StringUtils.underline2Camel(field.getFieldSourceName(),true));
+                    fieldList.add(field);
                 }
-                System.out.println();
+                returnMap.put(entry.getKey(),fieldList);
             }
         }
-
-        return null;
+        return returnMap;
     }
 
     public void getFieldSql(){
