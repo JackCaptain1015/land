@@ -40,14 +40,22 @@ public class FieldSegment {
     @Value("${generate.tableList}")
     private String [] tableList;
 
+    private static final Map<String,List<Field>> tableFieldsMap = Maps.newConcurrentMap();
+
     /**
      * return key:tableName
      */
     public Map<String,List<Field>> getField() throws SQLException {
-        Map<String,List<Field>> returnMap = Maps.newHashMap();
+        //未被连接的表
+        List<String> unlinkTableList = Lists.newArrayList();
+        for (String tableName : tableList) {
+            if (tableFieldsMap.get(tableName) == null){
+                unlinkTableList.add(tableName);
+            }
+        }
         //key:tableName value:querySql
         Map<String,String> sqlTableMap = Maps.newHashMap();
-        for (String tableName : tableList) {
+        for (String tableName : unlinkTableList) {
             String querySql = "select * from "+tableName;
             sqlTableMap.put(tableName,querySql);
         }
@@ -66,10 +74,10 @@ public class FieldSegment {
                     field.setFieldCamelName(StringUtils.underline2Camel(field.getFieldSourceName(),true));
                     fieldList.add(field);
                 }
-                returnMap.put(entry.getKey(),fieldList);
+                tableFieldsMap.put(entry.getKey(),fieldList);
             }
         }
-        return returnMap;
+        return tableFieldsMap;
     }
 
     public void getFieldSql(){
