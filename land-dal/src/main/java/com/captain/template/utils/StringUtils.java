@@ -59,4 +59,33 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * Description: Replaces all {n} placeholder use params
+     *
+     * @param originalStr a string such as :
+     *            "select * from table where id={0}, name={1}, gender={3}"
+     * @param replacementParams
+     *            real params: 1,yinshi.nc,male
+     * @note n start with 0
+     */
+    public static String replaceSequenced( String originalStr, Object... replacementParams ) {
+
+        if ( org.springframework.util.StringUtils.isEmpty(originalStr) ) {
+            return "";
+        }
+        if ( null == replacementParams || 0 == replacementParams.length ) {
+            return originalStr;
+        }
+
+        for ( int i = 0; i < replacementParams.length; i++ ) {
+            String elementOfParams = replacementParams[i] + "";
+            if (  "null".equalsIgnoreCase( elementOfParams) ) {
+                elementOfParams = "";
+            }
+            originalStr = originalStr.replace( "{" + i + "}", elementOfParams  );
+        }
+
+        return originalStr;
+    }
 }

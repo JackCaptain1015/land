@@ -28,6 +28,9 @@ public class TableSpider {
 
     private String generateResultMapSql(){
         Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) -> {
+
+        });
         return null;
     }
 }
