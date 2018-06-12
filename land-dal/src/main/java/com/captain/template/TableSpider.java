@@ -115,6 +115,10 @@ public class TableSpider {
         return tableResultMap;
     }
 
+    /**
+     *
+     * @return key:tableName value:columnSql
+     */
     private Map<String,String> generateColumnSql(){
         Map<String,String> tableResultMap = Maps.newHashMap();
 
@@ -125,9 +129,10 @@ public class TableSpider {
                 allFieldNameBuffer.append(field.getFieldSourceName()).append(",");
             });
             allFieldNameBuffer.deleteCharAt(allFieldNameBuffer.length()-1);
-
+            String columnSql = StringUtils.replaceSequenced(SqlSegmentEnums.SQL_TAG_SEG.getValue(), allFieldNameBuffer.toString());
+            tableResultMap.put(tableName,columnSql);
         });
-        return null;
+        return tableResultMap;
     }
 
 }
