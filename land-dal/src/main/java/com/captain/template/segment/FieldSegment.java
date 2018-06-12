@@ -40,6 +40,9 @@ public class FieldSegment {
     @Value("${generate.tableList}")
     private String [] tableList;
 
+    /**
+     * key:tableName 比如event_type value:表字段
+     */
     private final Map<String,List<Field>> tableFieldsMap = Maps.newConcurrentMap();
 
     /**
