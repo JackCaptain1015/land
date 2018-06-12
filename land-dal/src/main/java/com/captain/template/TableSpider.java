@@ -94,17 +94,15 @@ public class TableSpider {
             StringBuffer resultMapSegSb = new StringBuffer();
 
             fieldList.forEach((field) -> {
-                String resultIdStr = "";
+                String resultSegEnumValue;
                 if ("id".equals(field.getFieldSourceName())){
-                    resultIdStr = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_RESULT_ID_SEG.getValue(),
-                            field.getFieldSourceName(),field.getFieldCamelName(),
-                            JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
+                    resultSegEnumValue = SqlSegmentEnums.RESULTMAP_RESULT_ID_SEG.getValue();
                 }else{
-                    resultIdStr = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_RESULT_SEG.getValue(),
-                            field.getFieldSourceName(),field.getFieldCamelName(),
-                            JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
+                    resultSegEnumValue = SqlSegmentEnums.RESULTMAP_RESULT_SEG.getValue();
                 }
-                resultMapSegSb.append(resultIdStr);
+                String resultSegStr = StringUtils.replaceSequenced(resultSegEnumValue, field.getFieldSourceName(),field.getFieldCamelName(),
+                        JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
+                resultMapSegSb.append(resultSegStr);
 
             });
 
@@ -124,12 +122,8 @@ public class TableSpider {
 
         Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
         tableFieldsMap.forEach((tableName,fieldList) ->{
-            StringBuffer allFieldNameBuffer = new StringBuffer();
-            fieldList.forEach(field -> {
-                allFieldNameBuffer.append(field.getFieldSourceName()).append(",");
-            });
-            allFieldNameBuffer.deleteCharAt(allFieldNameBuffer.length()-1);
-            String columnSql = StringUtils.replaceSequenced(SqlSegmentEnums.SQL_TAG_SEG.getValue(), allFieldNameBuffer.toString());
+            String allFieldNamStr = this.getColumnSql(fieldList);
+            String columnSql = StringUtils.replaceSequenced(SqlSegmentEnums.SQL_TAG_SEG.getValue(), allFieldNamStr);
             tableResultMap.put(tableName,columnSql);
         });
         return tableResultMap;
@@ -181,6 +175,19 @@ public class TableSpider {
 
         });
         return null;
+    }
+
+    /**
+     * 比如id,name
+     * @return
+     */
+    private String getColumnSql(List<Field> fieldList){
+        StringBuffer allFieldNameBuffer = new StringBuffer();
+        fieldList.forEach(field -> {
+            allFieldNameBuffer.append(field.getFieldSourceName()).append(",");
+        });
+        allFieldNameBuffer.deleteCharAt(allFieldNameBuffer.length()-1);
+        return allFieldNameBuffer.toString();
     }
 
     private String getMapperLocation(String tableName){
