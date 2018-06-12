@@ -70,6 +70,13 @@ public class TableSpider {
     private Map<String,String> generateMapper(){
         Map<String,String> tableMapperMap = Maps.newHashMap();
 
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) -> {
+            // TODO: 2018/6/12 往mapper里填充数据
+            String mapperSql = StringUtils.replaceSequenced(SqlSegmentEnums.MAPPER_SEG.getValue(),
+                    mapperLocation+"."+StringUtils.underline2Camel(tableName,false)+"Mapper");
+
+        });
 
         return null;
     }
@@ -89,18 +96,38 @@ public class TableSpider {
                 String resultIdStr = "";
                 if ("id".equals(field.getFieldSourceName())){
                     resultIdStr = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_RESULT_ID_SEG.getValue(),
-                            field.getFieldSourceName(),field.getFieldCamelName(), JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
+                            field.getFieldSourceName(),field.getFieldCamelName(),
+                            JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
                 }else{
                     resultIdStr = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_RESULT_SEG.getValue(),
-                            field.getFieldSourceName(),field.getFieldCamelName(), JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
+                            field.getFieldSourceName(),field.getFieldCamelName(),
+                            JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
                 }
                 resultMapSegSb.append(resultIdStr);
 
             });
 
-            String resultMap = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_SEG.getValue(),StringUtils.underline2Camel(tableName,false),resultMapSegSb.toString());
+            String resultMap = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_SEG.getValue(),
+                    entityLocation+"."+StringUtils.underline2Camel(tableName,false),
+                    resultMapSegSb.toString());
             tableResultMap.put(tableName,resultMap);
         });
         return tableResultMap;
     }
+
+    private Map<String,String> generateColumnSql(){
+        Map<String,String> tableResultMap = Maps.newHashMap();
+
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) ->{
+            StringBuffer allFieldNameBuffer = new StringBuffer();
+            fieldList.forEach(field -> {
+                allFieldNameBuffer.append(field.getFieldSourceName()).append(",");
+            });
+            allFieldNameBuffer.deleteCharAt(allFieldNameBuffer.length()-1);
+
+        });
+        return null;
+    }
+
 }

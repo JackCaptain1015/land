@@ -35,7 +35,6 @@ public class LandDalApplicationTests {
 	@Test
 	public void templateTest() throws SQLException {
 
-		fieldSegment.getField();
 	}
 
 }
