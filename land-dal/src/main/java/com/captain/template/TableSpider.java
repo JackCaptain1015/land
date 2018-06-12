@@ -5,6 +5,7 @@ import com.captain.template.enums.SqlSegmentEnums;
 import com.captain.template.segment.FieldSegment;
 import com.captain.template.utils.StringUtils;
 import com.google.common.collect.Maps;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -50,6 +51,12 @@ public class TableSpider {
 
     @Resource
     private FieldSegment fieldSegment;
+    @Value("${generate.mapperLocation}")
+    private String mapperLocation;
+    @Value("${generate.entityLocation}")
+    private String entityLocation;
+    @Value("${generate.serviceLocation}")
+    private String serviceLocation;
 
     public void generateSqlMapper() throws SQLException {
         fieldSegment.init();
