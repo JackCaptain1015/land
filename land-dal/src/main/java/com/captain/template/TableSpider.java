@@ -58,6 +58,7 @@ public class TableSpider {
     @Value("${generate.serviceLocation}")
     private String serviceLocation;
 
+
     public void generateSqlMapper() throws SQLException {
         fieldSegment.init();
         StringBuffer mapperSqlBuffer = new StringBuffer();
@@ -74,7 +75,7 @@ public class TableSpider {
         tableFieldsMap.forEach((tableName,fieldList) -> {
             // TODO: 2018/6/12 往mapper里填充数据
             String mapperSql = StringUtils.replaceSequenced(SqlSegmentEnums.MAPPER_SEG.getValue(),
-                    mapperLocation+"."+StringUtils.underline2Camel(tableName,false)+"Mapper");
+                    this.getMapperLocation(tableName));
 
         });
 
@@ -108,8 +109,7 @@ public class TableSpider {
             });
 
             String resultMap = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_SEG.getValue(),
-                    entityLocation+"."+StringUtils.underline2Camel(tableName,false),
-                    resultMapSegSb.toString());
+                    this.getEntityLocation(tableName), resultMapSegSb.toString());
             tableResultMap.put(tableName,resultMap);
         });
         return tableResultMap;
@@ -151,9 +151,7 @@ public class TableSpider {
                         .append(field.getFieldSourceName()).append(",\n</if>");
             });
             String selectConditionSql = StringUtils.replaceSequenced(SqlSegmentEnums.SELECT_CONDITION_TAG_SEG.getValue(),
-                    entityLocation+"."+StringUtils.underline2Camel(tableName,false),
-                    tableName,
-                    fieldConditionSql.toString());
+                    this.getEntityLocation(tableName), tableName, fieldConditionSql.toString());
             tableResultMap.put(tableName,selectConditionSql);
         });
         return tableResultMap;
@@ -166,8 +164,7 @@ public class TableSpider {
         tableFieldsMap.forEach((tableName,fieldList) -> {
             for (Field field : fieldList) {
                 if ("id".equals(field.getFieldSourceName())){
-                    String deleteIdSql = StringUtils.replaceSequenced(SqlSegmentEnums.DELETE_ID_TAG_SEG.getValue(),field.getFieldDescType(),
-                            tableName);
+                    String deleteIdSql = StringUtils.replaceSequenced(SqlSegmentEnums.DELETE_ID_TAG_SEG.getValue(),field.getFieldDescType(), tableName);
                     tableResultMap.put(tableName,deleteIdSql);
                     break;
                 }
@@ -184,6 +181,14 @@ public class TableSpider {
 
         });
         return null;
+    }
+
+    private String getMapperLocation(String tableName){
+        return mapperLocation+"."+StringUtils.underline2Camel(tableName,false)+"Mapper";
+    }
+
+    private String getEntityLocation(String tableName){
+        return entityLocation+"."+StringUtils.underline2Camel(tableName,false);
     }
 
 }
