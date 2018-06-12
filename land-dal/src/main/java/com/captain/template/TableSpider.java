@@ -177,6 +177,12 @@ public class TableSpider {
     }
 
     private Map<String,String> generateInsertSql(){
+        Map<String,String> tableResultMap = Maps.newHashMap();
+
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) -> {
+
+        });
         return null;
     }
 
