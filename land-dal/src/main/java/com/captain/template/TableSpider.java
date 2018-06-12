@@ -135,4 +135,49 @@ public class TableSpider {
         return tableResultMap;
     }
 
+    /**
+     *
+     * @return key:tableName value:selectConditionSql
+     */
+    private Map<String,String> generateSelectConditionSql(){
+        Map<String,String> tableResultMap = Maps.newHashMap();
+
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) ->{
+
+            StringBuffer fieldConditionSql = new StringBuffer();
+            fieldList.forEach(field -> {
+                fieldConditionSql.append("<if test=\"").append(field.getFieldCamelName()).append(" != null\" >\n and")
+                        .append(field.getFieldSourceName()).append(",\n</if>");
+            });
+            String selectConditionSql = StringUtils.replaceSequenced(SqlSegmentEnums.SELECT_CONDITION_TAG_SEG.getValue(),
+                    entityLocation+"."+StringUtils.underline2Camel(tableName,false),
+                    tableName,
+                    fieldConditionSql.toString());
+            tableResultMap.put(tableName,selectConditionSql);
+        });
+        return tableResultMap;
+    }
+
+    private Map<String,String> generateDeleteIdSql(){
+        Map<String,String> tableResultMap = Maps.newHashMap();
+
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+        tableFieldsMap.forEach((tableName,fieldList) -> {
+            for (Field field : fieldList) {
+                if ("id".equals(field.getFieldSourceName())){
+                    String deleteIdSql = StringUtils.replaceSequenced(SqlSegmentEnums.DELETE_ID_TAG_SEG.getValue(),field.getFieldDescType(),
+                            tableName);
+                    tableResultMap.put(tableName,deleteIdSql);
+                    break;
+                }
+            }
+        });
+        return tableResultMap;
+    }
+
+    private Map<String,String> generateInsertSql(){
+        return null;
+    }
+
 }
