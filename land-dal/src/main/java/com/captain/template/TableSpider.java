@@ -57,6 +57,10 @@ public class TableSpider {
     private String entityLocation;
     @Value("${generate.serviceLocation}")
     private String serviceLocation;
+    @Value("${generate.createTimeFieldName}")
+    private String createTimeFieldName;
+    @Value("${generate.modifyTimeFieldName}")
+    private String modifyTimeFieldName;
 
 
     public void generateSqlMapper() throws SQLException {
@@ -142,7 +146,7 @@ public class TableSpider {
             StringBuffer fieldConditionSql = new StringBuffer();
             fieldList.forEach(field -> {
                 fieldConditionSql.append("<if test=\"").append(field.getFieldCamelName()).append(" != null\" >\n and")
-                        .append(field.getFieldSourceName()).append(",\n</if>");
+                        .append(field.getFieldSourceName()).append(" = #{").append(field.getFieldCamelName()).append("}").append(",\n</if>");
             });
             String selectConditionSql = StringUtils.replaceSequenced(SqlSegmentEnums.SELECT_CONDITION_TAG_SEG.getValue(),
                     this.getEntityLocation(tableName), tableName, fieldConditionSql.toString());
@@ -173,8 +177,24 @@ public class TableSpider {
         Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
         tableFieldsMap.forEach((tableName,fieldList) -> {
 
+            StringBuffer insertColumnSqlBuffer = new StringBuffer();
+            StringBuffer insertValueSqlBuffer = new StringBuffer();
+            fieldList.forEach(field -> {
+                boolean isCreateTimeExist = createTimeFieldName != null && createTimeFieldName.length() != 0 && createTimeFieldName.equals(field.getFieldSourceName());
+                boolean isModifyTimeExist = modifyTimeFieldName != null && modifyTimeFieldName.length() != 0 && modifyTimeFieldName.equals(field.getFieldSourceName());
+                if (isCreateTimeExist || isModifyTimeExist){
+                    insertColumnSqlBuffer.append(field.getFieldSourceName()).append(",");
+                    insertValueSqlBuffer.append("now(),");
+                }else {
+                    insertColumnSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getKey()));
+                    insertValueSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.INSERT_IF_TAG_SEG.getKey()));
+                }
+            });
+            String insertSql = StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_TAG_SEG.getValue(), entityLocation, tableName, insertColumnSqlBuffer.toString(), insertValueSqlBuffer.toString());
+
+            tableResultMap.put(tableName,insertSql);
         });
-        return null;
+        return tableResultMap;
     }
 
     /**
@@ -188,6 +208,23 @@ public class TableSpider {
         });
         allFieldNameBuffer.deleteCharAt(allFieldNameBuffer.length()-1);
         return allFieldNameBuffer.toString();
+    }
+
+    /**
+     * <if>标签sql
+     * @return
+     */
+    private String getIfTagSql(String sourceColumnName,String ifTagType){
+        if (SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
+        }
+        if (SqlSegmentEnums.INSERT_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true));
+        }
+        if (SqlSegmentEnums.UPDATE_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(SqlSegmentEnums.UPDATE_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
+        }
+        return "";
     }
 
     private String getMapperLocation(String tableName){

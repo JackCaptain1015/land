@@ -37,8 +37,10 @@ public enum SqlSegmentEnums {
             "      {2}\n"+
             "    </set>\n" +
             "    where id = #{id}\n" +
-            "  </update>");
-
+            "  </update>"),
+    INSERT_COLUMN_IF_TAG_SEG("insertColumnIfTag","<if test=\"{0} != null\" >\n{1},\n</if>\n"),
+    INSERT_IF_TAG_SEG("insertIfTag","<if test=\"{0} != null\" >\n#{{0}},\n</if>\n"),
+    UPDATE_IF_TAG_SEG("updateIfTag","<if test=\"{0} != null\" >\n{1} = #{{0}},\n</if>\n");
 
     private String key;
     private String value;
