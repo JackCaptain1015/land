@@ -171,6 +171,10 @@ public class TableSpider {
         return tableResultMap;
     }
 
+    /**
+     * 生成insertSql
+     * @return
+     */
     private Map<String,String> generateInsertSql(){
         Map<String,String> tableResultMap = Maps.newHashMap();
 
@@ -193,6 +197,33 @@ public class TableSpider {
             String insertSql = StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_TAG_SEG.getValue(), entityLocation, tableName, insertColumnSqlBuffer.toString(), insertValueSqlBuffer.toString());
 
             tableResultMap.put(tableName,insertSql);
+        });
+        return tableResultMap;
+    }
+
+    private Map<String,String> generateUpdateSql(){
+        Map<String,String> tableResultMap = Maps.newHashMap();
+
+        Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
+
+
+        tableFieldsMap.forEach((tableName,fieldList) -> {
+
+            StringBuffer updateSqlBuffer = new StringBuffer();
+            fieldList.forEach(field -> {
+                boolean isCreateTimeExist = createTimeFieldName != null && createTimeFieldName.length() != 0 && createTimeFieldName.equals(field.getFieldSourceName());
+                boolean isModifyTimeExist = modifyTimeFieldName != null && modifyTimeFieldName.length() != 0 && modifyTimeFieldName.equals(field.getFieldSourceName());
+                if (isCreateTimeExist){
+                    updateSqlBuffer.append("");
+                }else if(isModifyTimeExist){
+                    updateSqlBuffer.append(field.getFieldSourceName()).append(" = now(),\n");
+                }else{
+                    updateSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.UPDATE_IF_TAG_SEG.getKey()));
+                }
+            });
+            String updateSql = StringUtils.replaceSequenced(SqlSegmentEnums.UPDATE_TAG_SEG.getValue(), entityLocation, tableName, updateSqlBuffer.toString());
+
+            tableResultMap.put(tableName,updateSql);
         });
         return tableResultMap;
     }
