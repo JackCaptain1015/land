@@ -65,8 +65,7 @@ public class TableSpider {
 
     public void generateSqlMapper() throws SQLException {
         fieldSegment.init();
-        StringBuffer mapperSqlBuffer = new StringBuffer();
-        mapperSqlBuffer.append(SqlSegmentEnums.HEAD_SEG.getValue());
+        Map<String, String> mapperMap = this.generateMapper();
 
     }
 
@@ -74,16 +73,29 @@ public class TableSpider {
 
     private Map<String,String> generateMapper(){
         Map<String,String> tableMapperMap = Maps.newHashMap();
+        //生成代码片段
+        Map<String, String> resultMapSqlMap = this.generateResultMapSql();
+        Map<String, String> columnSqlMap = this.generateColumnSql();
+        Map<String, String> selectConditionSqlMap = this.generateSelectConditionSql();
+        Map<String, String> deleteIdSqlMap = this.generateDeleteIdSql();
+        Map<String, String> insertSqlMap = this.generateInsertSql();
+        Map<String, String> updateSqlMap = this.generateUpdateSql();
 
         Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
         tableFieldsMap.forEach((tableName,fieldList) -> {
+            //拼接代码片段
+            StringBuffer jointSqlSegmentBuffer = new StringBuffer();
+            jointSqlSegmentBuffer.append(resultMapSqlMap.get(tableName)).append(columnSqlMap.get(tableName))
+                    .append(selectConditionSqlMap.get(tableName)).append(deleteIdSqlMap.get(tableName))
+                    .append(insertSqlMap.get(tableName)).append(updateSqlMap.get(tableName));
+
             // TODO: 2018/6/12 往mapper里填充数据
             String mapperSql = StringUtils.replaceSequenced(SqlSegmentEnums.MAPPER_SEG.getValue(),
-                    this.getMapperLocation(tableName));
-
+                    this.getMapperLocation(tableName),jointSqlSegmentBuffer.toString());
+            tableMapperMap.put(tableName,SqlSegmentEnums.HEAD_SEG.getValue()+mapperSql);
         });
 
-        return null;
+        return tableMapperMap;
     }
 
     /**
