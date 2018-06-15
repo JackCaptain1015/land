@@ -59,11 +59,6 @@ public class GenerateMapperXml {
     @Value("${generate.modifyTimeFieldName}")
     private String modifyTimeFieldName;
 
-    @PostConstruct
-    public void init() throws SQLException {
-        fieldSegment.init();
-    }
-
     public Map<String,String> generateMapper(){
         Map<String,String> tableMapperMap = Maps.newHashMap();
         //生成代码片段

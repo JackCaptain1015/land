@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
@@ -48,6 +49,7 @@ public class FieldSegment {
     /**
      * return key:tableName
      */
+    @PostConstruct
     public void init() throws SQLException {
         //未被连接的表
         List<String> unlinkTableList = Lists.newArrayList();
