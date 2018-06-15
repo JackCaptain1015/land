@@ -1,11 +1,9 @@
 package com.captain.template.enums;
 
-import lombok.Data;
-
 /**
  * Created by wurz on 2018/6/8.
  */
-public enum SqlSegmentEnums {
+public enum MapperXmlSqlEnums {
     HEAD_SEG("head","<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
             "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\n"),
     MAPPER_SEG("mapper","<mapper namespace=\"{0}\" >\n {1} \n</mapper>\n"),
@@ -45,7 +43,7 @@ public enum SqlSegmentEnums {
     private String key;
     private String value;
 
-    SqlSegmentEnums(String key, String value) {
+    MapperXmlSqlEnums(String key, String value) {
         this.key = key;
         this.value = value;
     }

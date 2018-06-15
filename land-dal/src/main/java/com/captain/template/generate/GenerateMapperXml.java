@@ -1,7 +1,7 @@
 package com.captain.template.generate;
 
 import com.captain.template.bean.Field;
-import com.captain.template.enums.SqlSegmentEnums;
+import com.captain.template.enums.MapperXmlSqlEnums;
 import com.captain.template.segment.FieldSegment;
 import com.captain.template.utils.StringUtils;
 import com.google.common.collect.Maps;
@@ -82,9 +82,9 @@ public class GenerateMapperXml {
                     .append(selectConditionSqlMap.get(tableName)).append(deleteIdSqlMap.get(tableName))
                     .append(insertSqlMap.get(tableName)).append(updateSqlMap.get(tableName));
 
-            String mapperSql = StringUtils.replaceSequenced(SqlSegmentEnums.MAPPER_SEG.getValue(),
+            String mapperSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.MAPPER_SEG.getValue(),
                     this.getMapperLocation(tableName),jointSqlSegmentBuffer.toString());
-            tableMapperMap.put(tableName,SqlSegmentEnums.HEAD_SEG.getValue()+mapperSql);
+            tableMapperMap.put(tableName, MapperXmlSqlEnums.HEAD_SEG.getValue()+mapperSql);
         });
 
         return tableMapperMap;
@@ -104,9 +104,9 @@ public class GenerateMapperXml {
             fieldList.forEach((field) -> {
                 String resultSegEnumValue;
                 if ("id".equals(field.getFieldSourceName())){
-                    resultSegEnumValue = SqlSegmentEnums.RESULTMAP_RESULT_ID_SEG.getValue();
+                    resultSegEnumValue = MapperXmlSqlEnums.RESULTMAP_RESULT_ID_SEG.getValue();
                 }else{
-                    resultSegEnumValue = SqlSegmentEnums.RESULTMAP_RESULT_SEG.getValue();
+                    resultSegEnumValue = MapperXmlSqlEnums.RESULTMAP_RESULT_SEG.getValue();
                 }
                 String resultSegStr = StringUtils.replaceSequenced(resultSegEnumValue, field.getFieldSourceName(),field.getFieldCamelName(),
                         JAVA_TYPE_MAP.get(field.getFieldDescType().toLowerCase()));
@@ -114,7 +114,7 @@ public class GenerateMapperXml {
 
             });
 
-            String resultMap = StringUtils.replaceSequenced(SqlSegmentEnums.RESULTMAP_SEG.getValue(),
+            String resultMap = StringUtils.replaceSequenced(MapperXmlSqlEnums.RESULTMAP_SEG.getValue(),
                     this.getEntityLocation(tableName), resultMapSegSb.toString());
             tableResultMap.put(tableName,resultMap);
         });
@@ -131,7 +131,7 @@ public class GenerateMapperXml {
         Map<String, List<Field>> tableFieldsMap = fieldSegment.getTableFieldsMap();
         tableFieldsMap.forEach((tableName,fieldList) ->{
             String allFieldNamStr = this.getColumnSql(fieldList);
-            String columnSql = StringUtils.replaceSequenced(SqlSegmentEnums.SQL_TAG_SEG.getValue(), allFieldNamStr);
+            String columnSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.SQL_TAG_SEG.getValue(), allFieldNamStr);
             tableResultMap.put(tableName,columnSql);
         });
         return tableResultMap;
@@ -152,7 +152,7 @@ public class GenerateMapperXml {
                 fieldConditionSql.append("<if test=\"").append(field.getFieldCamelName()).append(" != null\" >\n and")
                         .append(field.getFieldSourceName()).append(" = #{").append(field.getFieldCamelName()).append("}").append(",\n</if>");
             });
-            String selectConditionSql = StringUtils.replaceSequenced(SqlSegmentEnums.SELECT_CONDITION_TAG_SEG.getValue(),
+            String selectConditionSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.SELECT_CONDITION_TAG_SEG.getValue(),
                     this.getEntityLocation(tableName), tableName, fieldConditionSql.toString());
             tableResultMap.put(tableName,selectConditionSql);
         });
@@ -166,7 +166,7 @@ public class GenerateMapperXml {
         tableFieldsMap.forEach((tableName,fieldList) -> {
             for (Field field : fieldList) {
                 if ("id".equals(field.getFieldSourceName())){
-                    String deleteIdSql = StringUtils.replaceSequenced(SqlSegmentEnums.DELETE_ID_TAG_SEG.getValue(),field.getFieldDescType(), tableName);
+                    String deleteIdSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.DELETE_ID_TAG_SEG.getValue(),field.getFieldDescType(), tableName);
                     tableResultMap.put(tableName,deleteIdSql);
                     break;
                 }
@@ -194,11 +194,11 @@ public class GenerateMapperXml {
                     insertColumnSqlBuffer.append(field.getFieldSourceName()).append(",");
                     insertValueSqlBuffer.append("now(),");
                 }else {
-                    insertColumnSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getKey()));
-                    insertValueSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.INSERT_IF_TAG_SEG.getKey()));
+                    insertColumnSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(), MapperXmlSqlEnums.INSERT_COLUMN_IF_TAG_SEG.getKey()));
+                    insertValueSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(), MapperXmlSqlEnums.INSERT_IF_TAG_SEG.getKey()));
                 }
             });
-            String insertSql = StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_TAG_SEG.getValue(), entityLocation, tableName, insertColumnSqlBuffer.toString(), insertValueSqlBuffer.toString());
+            String insertSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.INSERT_TAG_SEG.getValue(), entityLocation, tableName, insertColumnSqlBuffer.toString(), insertValueSqlBuffer.toString());
 
             tableResultMap.put(tableName,insertSql);
         });
@@ -222,10 +222,10 @@ public class GenerateMapperXml {
                 }else if(isModifyTimeExist){
                     updateSqlBuffer.append(field.getFieldSourceName()).append(" = now(),\n");
                 }else{
-                    updateSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(),SqlSegmentEnums.UPDATE_IF_TAG_SEG.getKey()));
+                    updateSqlBuffer.append(this.getIfTagSql(field.getFieldSourceName(), MapperXmlSqlEnums.UPDATE_IF_TAG_SEG.getKey()));
                 }
             });
-            String updateSql = StringUtils.replaceSequenced(SqlSegmentEnums.UPDATE_TAG_SEG.getValue(), entityLocation, tableName, updateSqlBuffer.toString());
+            String updateSql = StringUtils.replaceSequenced(MapperXmlSqlEnums.UPDATE_TAG_SEG.getValue(), entityLocation, tableName, updateSqlBuffer.toString());
 
             tableResultMap.put(tableName,updateSql);
         });
@@ -250,14 +250,14 @@ public class GenerateMapperXml {
      * @return
      */
     private String getIfTagSql(String sourceColumnName,String ifTagType){
-        if (SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getKey().equals(ifTagType)){
-            return StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_COLUMN_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
+        if (MapperXmlSqlEnums.INSERT_COLUMN_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(MapperXmlSqlEnums.INSERT_COLUMN_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
         }
-        if (SqlSegmentEnums.INSERT_IF_TAG_SEG.getKey().equals(ifTagType)){
-            return StringUtils.replaceSequenced(SqlSegmentEnums.INSERT_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true));
+        if (MapperXmlSqlEnums.INSERT_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(MapperXmlSqlEnums.INSERT_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true));
         }
-        if (SqlSegmentEnums.UPDATE_IF_TAG_SEG.getKey().equals(ifTagType)){
-            return StringUtils.replaceSequenced(SqlSegmentEnums.UPDATE_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
+        if (MapperXmlSqlEnums.UPDATE_IF_TAG_SEG.getKey().equals(ifTagType)){
+            return StringUtils.replaceSequenced(MapperXmlSqlEnums.UPDATE_IF_TAG_SEG.getValue(),StringUtils.underline2Camel(sourceColumnName,true),sourceColumnName);
         }
         return "";
     }
