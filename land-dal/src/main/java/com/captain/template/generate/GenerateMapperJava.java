@@ -5,4 +5,5 @@ package com.captain.template.generate;
  */
 public class GenerateMapperJava {
 
+
 }
