@@ -15,9 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ContextConfiguration(classes = {MysqlDataSourceConfig.class})
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@ContextConfiguration(classes = {MysqlDataSourceConfig.class})
 public class LandDalApplicationTests {
 
 	@Resource

@@ -4,8 +4,8 @@ import com.captain.odps.mapper.OdpsDemoMapper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Propagation;
+//import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -14,10 +14,10 @@ import javax.annotation.Resource;
  */
 @Service
 public class DemoServiceImpl implements DemoService{
-    @Resource
+//    @Resource
     private OdpsDemoMapper odpsDemoMapper;
 
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+//    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @Override
     public Integer getCount() {
         return odpsDemoMapper.getCount();

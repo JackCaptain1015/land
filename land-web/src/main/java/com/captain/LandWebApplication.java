@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan("com.captain")
+//@ComponentScan("com.captain")
 public class LandWebApplication {
 	/**
 	 * 项目启动类

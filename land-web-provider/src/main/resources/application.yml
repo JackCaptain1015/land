@@ -4,11 +4,11 @@
 #  profiles:
 #    active: pre
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
     #nacos会把该名称当做服务名称
-    name: land
+    name: land-provider
   cloud:
     nacos:
       #nacos的服务器地址
