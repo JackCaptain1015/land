@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource.mysql",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.captain.config.MysqlDataSourceConfig",
+      "sourceMethod": "primaryDataSource()"
+    },
+    {
+      "name": "spring.datasource.odps",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.captain.config.OdpsDataSourceConfig",
+      "sourceMethod": "secondDataSource()"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
