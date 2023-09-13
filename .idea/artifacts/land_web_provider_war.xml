@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="land-web-provider:war">
+    <output-path>$PROJECT_DIR$/land-web-provider/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>land-web-provider</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="land-web-provider-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="land-web-provider:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -12,6 +12,13 @@
         <module name="land-biz" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="land" target="1.8" />
+      <module name="land-biz" target="1.8" />
+      <module name="land-dal" target="1.8" />
+      <module name="land-web" target="1.8" />
+      <module name="land-web-provider" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

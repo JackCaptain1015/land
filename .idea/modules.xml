@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/land.iml" filepath="$PROJECT_DIR$/.idea/land.iml" />
+      <module fileurl="file://$PROJECT_DIR$/land-biz/land-biz.iml" filepath="$PROJECT_DIR$/land-biz/land-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/land-dal/land-dal.iml" filepath="$PROJECT_DIR$/land-dal/land-dal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/land-web/land-web.iml" filepath="$PROJECT_DIR$/land-web/land-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/land-web-provider/land-web-provider.iml" filepath="$PROJECT_DIR$/land-web-provider/land-web-provider.iml" />
+    </modules>
+  </component>
+</project>

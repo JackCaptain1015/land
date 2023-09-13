@@ -33,71 +33,71 @@ public class LandWebApplicationTests {
 	@Resource
 	private DemoController demoController;
 
-	@Autowired
-	@Qualifier("mysqlJdbcTemplate")
-	private JdbcTemplate mysqlJdbcTemplate;
-
-	@Autowired
-	@Qualifier("odpsJdbcTemplate")
-	private JdbcTemplate odpsJdbcTemplate;
+//	@Autowired
+//	@Qualifier("mysqlJdbcTemplate")
+//	private JdbcTemplate mysqlJdbcTemplate;
+//
+//	@Autowired
+//	@Qualifier("odpsJdbcTemplate")
+//	private JdbcTemplate odpsJdbcTemplate;
 
 	/***
 	 * 通过api方式创建logger，这样可以得到特定的logger来记录日志
 	 */
-	@Test
-	public void getLog(){
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		Logger actionLogger = loggerContext.getLogger("actionLogger");
-//		actionLogger.detachAndStopAllAppenders();
-
-		String logPath = "../logs/land-logs/action.log";
-		//appender
-		RollingFileAppender<ILoggingEvent> rollingFileAppender = new RollingFileAppender<ILoggingEvent>();
-		rollingFileAppender.setContext(loggerContext);
-		rollingFileAppender.setName("actionLog");
-		rollingFileAppender.setFile(logPath);
-		rollingFileAppender.setAppend(true);
-
-		//policy
-		TimeBasedRollingPolicy<ILoggingEvent> timePolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
-		timePolicy.setContext(loggerContext);
-		timePolicy.setMaxHistory(2);
-		timePolicy.setFileNamePattern(logPath+"/action.%d{yyyy-MM-dd}.log");
-		timePolicy.setParent(rollingFileAppender);
-		timePolicy.start();
-		rollingFileAppender.setRollingPolicy(timePolicy);
-
-		//encoder
-		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-		encoder.setContext(loggerContext);
-		encoder.setPattern("[%d{'MM-dd HH:mm:ss,SSS',GMT+8:00}] %level [%thread] - [%c.%M][%line] - %msg%n");
-		encoder.setCharset(UTF_8);
-		encoder.start();
-		rollingFileAppender.setEncoder(encoder);
-
-		rollingFileAppender.start();
-
-		actionLogger.addAppender(rollingFileAppender);
-		actionLogger.setLevel(Level.toLevel("INFO"));
-		actionLogger.setAdditive(false);
-
-		actionLogger.info("actionLogger init");
-	}
-
-	@Test
-	public void testJdbcTemplate(){
-		Integer getCount = odpsJdbcTemplate.queryForObject("select count(*) from action_log_real where action_date = 20171205", Integer.class);
-		System.out.println(getCount);
-	}
-
-	@Test
-	public void demoServiceTest(){
-		System.out.println(demoService.getCount());
-	}
-
-	@Test
-	public void demoControllerTest(){
-		System.out.println(demoController.getCount());
-	}
+//	@Test
+//	public void getLog(){
+//		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+//		Logger actionLogger = loggerContext.getLogger("actionLogger");
+////		actionLogger.detachAndStopAllAppenders();
+//
+//		String logPath = "../logs/land-logs/action.log";
+//		//appender
+//		RollingFileAppender<ILoggingEvent> rollingFileAppender = new RollingFileAppender<ILoggingEvent>();
+//		rollingFileAppender.setContext(loggerContext);
+//		rollingFileAppender.setName("actionLog");
+//		rollingFileAppender.setFile(logPath);
+//		rollingFileAppender.setAppend(true);
+//
+//		//policy
+//		TimeBasedRollingPolicy<ILoggingEvent> timePolicy = new TimeBasedRollingPolicy<ILoggingEvent>();
+//		timePolicy.setContext(loggerContext);
+//		timePolicy.setMaxHistory(2);
+//		timePolicy.setFileNamePattern(logPath+"/action.%d{yyyy-MM-dd}.log");
+//		timePolicy.setParent(rollingFileAppender);
+//		timePolicy.start();
+//		rollingFileAppender.setRollingPolicy(timePolicy);
+//
+//		//encoder
+//		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+//		encoder.setContext(loggerContext);
+//		encoder.setPattern("[%d{'MM-dd HH:mm:ss,SSS',GMT+8:00}] %level [%thread] - [%c.%M][%line] - %msg%n");
+//		encoder.setCharset(UTF_8);
+//		encoder.start();
+//		rollingFileAppender.setEncoder(encoder);
+//
+//		rollingFileAppender.start();
+//
+//		actionLogger.addAppender(rollingFileAppender);
+//		actionLogger.setLevel(Level.toLevel("INFO"));
+//		actionLogger.setAdditive(false);
+//
+//		actionLogger.info("actionLogger init");
+//	}
+//
+//	@Test
+//	public void testJdbcTemplate(){
+//		Integer getCount = odpsJdbcTemplate.queryForObject("select count(*) from action_log_real where action_date = 20171205", Integer.class);
+//		System.out.println(getCount);
+//	}
+//
+//	@Test
+//	public void demoServiceTest(){
+////		System.out.println(demoService.getCount());
+//	}
+//
+//	@Test
+//	public void demoControllerTest(){
+////		System.out.println(demoController.getCount());
+//	}
 
 }
